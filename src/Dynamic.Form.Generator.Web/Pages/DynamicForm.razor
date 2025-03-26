@@ -1,7 +1,11 @@
 ﻿@using System.Text.Json
 @using Dynamic.Form.Generator.Shared
 @using MudBlazor
+
+
 @code {
+
+    #region Variable Declaration
     private string jsonConfig = @"
     { ""title"": ""Sample Form"", ""fields"": [ { ""type"": ""text"", ""label"": ""Name"", ""required"": true },
     { ""type"": ""email"", ""label"": ""Email"", ""required"": true }, 
@@ -12,6 +16,9 @@
     private List<FormField> formFields; 
     private Dictionary<string, object> formData = new Dictionary<string, object>(); 
     private string serializedFormData;
+    #endregion
+
+    #region Method Implementation
 
     private void LoadForm()
     {
@@ -94,22 +101,12 @@
         return null; // Default value if the key doesn't exist or is not an int
     }
 
-    private int GetValue(string label)
-    {
-        if (formData.ContainsKey(label) && formData[label] is int value)
-        {
-            return value;
-        }
-        return 0; // Default value if the key doesn't exist or is not an int
-    }
-
-    private void SetValue(string label, object value)
-    {
-        formData[label] = value;
-    }
-
     private string Converter(string value) => value;
+
+    #endregion
 }
+
+
 <h1 style="margin-left: 20px;">Dynamic form example</h1>
 <div style="margin-left: 20px; margin-top: 20px; width: 50%;">
     <MudTextField @bind-Value="jsonConfig" Label="Paste JSON Configuration" Lines="20" FullWidth="true" Style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; font-family: Verdana; font-size: 14px;" /> <MudButton OnClick="LoadForm" Variant="Variant.Filled" Color="Color.Primary" Style="margin-top: 20px;">Load Form</MudButton>
@@ -181,7 +178,6 @@
             </EditForm>
         </div>
     }
-
 
     @if (!string.IsNullOrEmpty(serializedFormData))
     {
