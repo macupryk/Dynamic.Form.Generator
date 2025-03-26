@@ -1,0 +1,192 @@
+﻿@using System.Text.Json
+@using Dynamic.Form.Generator.Shared
+@using MudBlazor
+@code {
+    private string jsonConfig = @"
+    { ""title"": ""Sample Form"", ""fields"": [ { ""type"": ""text"", ""label"": ""Name"", ""required"": true },
+    { ""type"": ""email"", ""label"": ""Email"", ""required"": true }, 
+    { ""type"": ""number"", ""label"": ""Age"", ""min"": 18, ""max"": 100 },
+    { ""type"": ""dropdown"", ""label"": ""Industry"", ""values"": [""Tech"", ""Production"", ""Health""], ""required"": true }, 
+    { ""type"": ""checkbox"", ""label"": ""Subscribe to Newsletter"", ""required"": false } ] }";
+
+    private List<FormField> formFields; 
+    private Dictionary<string, object> formData = new Dictionary<string, object>(); 
+    private string serializedFormData;
+
+    private void LoadForm()
+    {
+        try
+        {
+            Console.WriteLine("JSON Config: " + jsonConfig);
+            var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+            var formConfig = JsonSerializer.Deserialize<FormConfig>(jsonConfig, options);
+            if (formConfig != null)
+            {
+                Console.WriteLine($"Form title: {formConfig.Title}");
+                if (formConfig.Fields != null)
+                {
+                    formFields = formConfig.Fields;
+                    foreach (var field in formFields)
+                    {
+                        Console.WriteLine($"Field: {field.Label}, Type: {field.Type}");
+                        formData[field.Label] = field.Type switch
+                        {
+                            "number" => 0,
+                            "checkbox" => false,
+                            _ => string.Empty
+                        };
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Fields are null.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Deserialization failed.");
+            }
+        }
+        catch (JsonException ex)
+        {
+            Console.WriteLine($"JSON Deserialization error: {ex.Message}");
+        }
+    }
+
+    private void HandleValidSubmit()
+    {
+        serializedFormData = JsonSerializer.Serialize(formData);
+        Console.WriteLine("Form Data: " + serializedFormData);
+        // Handle form submission (e.g., send data to an API)
+    }
+
+    private void OnValueChanged<T>(T value, string label)
+    {
+        formData[label] = value;
+    }
+
+    private void OnNumericValueChanged(int? value, string label)
+    {
+        if (value.HasValue)
+        {
+            formData[label] = value.Value; // Store the integer value
+        }
+        else
+        {
+            formData[label] = null; // Handle null if the value is not set
+        }
+    }
+
+    private void OnCheckboxChanged(bool? checkedValue, string label)
+    {
+        formData[label] = checkedValue; // Update the formData dictionary with the new value
+    }
+
+    private int? GetNumericValue(string label)
+    {
+        if (formData.ContainsKey(label) && formData[label] is int value)
+        {
+            return value;
+        }
+        return null; // Default value if the key doesn't exist or is not an int
+    }
+
+    private int GetValue(string label)
+    {
+        if (formData.ContainsKey(label) && formData[label] is int value)
+        {
+            return value;
+        }
+        return 0; // Default value if the key doesn't exist or is not an int
+    }
+
+    private void SetValue(string label, object value)
+    {
+        formData[label] = value;
+    }
+
+    private string Converter(string value) => value;
+}
+<h1 style="margin-left: 20px;">Dynamic form example</h1>
+<div style="margin-left: 20px; margin-top: 20px; width: 50%;">
+    <MudTextField @bind-Value="jsonConfig" Label="Paste JSON Configuration" Lines="20" FullWidth="true" Style="border: 1px solid #ccc; padding: 20px; border-radius: 5px; font-family: Verdana; font-size: 14px;" /> <MudButton OnClick="LoadForm" Variant="Variant.Filled" Color="Color.Primary" Style="margin-top: 20px;">Load Form</MudButton>
+    @if (formFields != null && formFields.Any())
+    {
+        <div style="margin-top: 20px;">
+            <EditForm Model="@formData" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                @* Commented out switch statement *@
+                @foreach (var formField in formFields)
+                {
+                    @switch (formField.Type)
+                    {
+                        case "text":
+                            {
+                                var value = formData[formField.Label] as string;
+                                <MudTextField T="string" Label="@formField.Label" Required="@formField.Required" ValueChanged="@(v => OnValueChanged(v, formField.Label))" />
+                                break;
+                            }
+                        case "email":
+                            {
+                                var value = formData[formField.Label] as string;
+                                <MudTextField T="string" Label="@formField.Label" Required="@formField.Required" ValueChanged="@(v => OnValueChanged(v, formField.Label))" />
+                                break;
+                            }
+                        case "number":
+                            {
+                                var value = GetNumericValue(formField.Label);
+                                <MudNumericField TValue="int?"
+                                                 Value="@GetNumericValue(formField.Label)"
+                                                 ValueChanged="@(EventCallback.Factory.Create<int?>(this, v => OnNumericValueChanged(v, formField.Label)))"
+                                                 Label="@formField.Label"
+                                                 Min="@formField.Min"
+                                                 Max="@formField.Max"
+                                                 Required="@formField.Required"
+                                                 Immediate="true" />
+                                break;
+                            }
+                        case "dropdown":
+                            {
+                                var value = formData[formField.Label] as string;
+                                <MudSelect T="string" Value="value" ToStringFunc="Converter" ValueChanged="@(v => OnValueChanged(v, formField.Label))" Label="@formField.Label" Required="@formField.Required">
+                                    @foreach (var item in formField.Values ?? new List<string>())
+                                    {
+                                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                                    }
+                                </MudSelect>
+                                break;
+                            }
+                        case "checkbox":
+                            {
+                                bool? value = formData.ContainsKey(formField.Label) ? formData[formField.Label] as bool? : null;
+
+                                // MudCheckBox binding and ValueChanged
+                                <MudCheckBox TValue="bool?"
+                                             Value="value"
+                                             ValueChanged="@(EventCallback.Factory.Create<bool?>(this, v => OnCheckboxChanged(v, formField.Label)))"
+                                             Label="@formField.Label" />
+                                break;
+                            }
+                        default:
+                            <p>Unsupported field type: @formField.Type</p>
+                            break;
+                    }
+                }
+
+                <MudButton Type="Submit" Variant="Variant.Filled" Color="Color.Primary" OnClick="HandleValidSubmit">Submit</MudButton>
+            </EditForm>
+        </div>
+    }
+
+
+    @if (!string.IsNullOrEmpty(serializedFormData))
+    {
+        <div style="margin-top: 20px;">
+            <MudTextField @bind-Value="serializedFormData" Label="Serialized Form Data" Lines="10" FullWidth="true" ReadOnly="true" />
+        </div>
+    }
+</div>

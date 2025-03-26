@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamic.Form.Generator.Web", "Dynamic.Form.Generator.Web\Dynamic.Form.Generator.Web.csproj", "{D36206A7-CFA4-4E14-A038-9209A62AB43E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamic.Form.Generator.Shared", "Dynamic.Form.Generator.Shared\Dynamic.Form.Generator.Shared.csproj", "{1204074E-A7A5-466C-BF61-941701C6EDBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D36206A7-CFA4-4E14-A038-9209A62AB43E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D36206A7-CFA4-4E14-A038-9209A62AB43E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D36206A7-CFA4-4E14-A038-9209A62AB43E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D36206A7-CFA4-4E14-A038-9209A62AB43E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
