@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamic.Form.Generator.Web"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamic.Form.Generator.Shared", "Dynamic.Form.Generator.Shared\Dynamic.Form.Generator.Shared.csproj", "{1204074E-A7A5-466C-BF61-941701C6EDBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dynamic.Form.Generator.Web.Test", "..\Tests\UnitTests\Dynamic.Form.Generator.Web.Test\Dynamic.Form.Generator.Web.Test\Dynamic.Form.Generator.Web.Test.csproj", "{720CC907-A7AE-4F30-99D8-C2DBB9F75BE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1204074E-A7A5-466C-BF61-941701C6EDBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{720CC907-A7AE-4F30-99D8-C2DBB9F75BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{720CC907-A7AE-4F30-99D8-C2DBB9F75BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{720CC907-A7AE-4F30-99D8-C2DBB9F75BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{720CC907-A7AE-4F30-99D8-C2DBB9F75BE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
